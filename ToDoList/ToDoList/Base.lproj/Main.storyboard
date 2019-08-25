@@ -140,6 +140,36 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="NOTES" id="3Pq-zx-5y6">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="222" id="mHY-ya-wfC">
+                                        <rect key="frame" x="0.0" y="330.5" width="375" height="222"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mHY-ya-wfC" id="ZuB-an-1CU">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="221.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="oWg-UT-0Lc">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="222"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="375" id="6jr-5Z-q4R"/>
+                                                    </constraints>
+                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="oWg-UT-0Lc" firstAttribute="leading" secondItem="ZuB-an-1CU" secondAttribute="leading" id="BS9-Qq-OvG"/>
+                                                <constraint firstAttribute="trailing" secondItem="oWg-UT-0Lc" secondAttribute="trailing" id="QhZ-wO-58d"/>
+                                                <constraint firstItem="oWg-UT-0Lc" firstAttribute="top" secondItem="ZuB-an-1CU" secondAttribute="top" id="dqy-d9-Pa6"/>
+                                                <constraint firstAttribute="bottom" secondItem="oWg-UT-0Lc" secondAttribute="bottom" id="jbg-I6-2ys"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="LNU-uI-TBS" id="pvw-mf-PNY"/>

@@ -43,14 +43,8 @@ class NewToDoViewController: UITableViewController {
     }
     
     @IBAction func isCompleteButtonTapped(_ sender: UIButton) {
-        if(isCompleteButton.isSelected == false){
-            isCompleteButton.isSelected = true
-            isCompleteButton.setImage(UIImage(named: "check"), for: .normal)
-        }
-        else{
-            isCompleteButton.isSelected = false
-            isCompleteButton.setImage(UIImage(named: "cross"), for: .normal)
-        }
+        isCompleteButton.isSelected = !isCompleteButton.isSelected
+        updateImageCompleteButton(bool: isCompleteButton.isSelected)
     }
     
     func updateDueDateLabel(date: Date) {
@@ -63,12 +57,31 @@ class NewToDoViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dueDatePicker.date = Date().addingTimeInterval(24*60*60)
+        // show info after passing model
+        if let todo = todo {
+            navigationItem.title = "To-Do"
+            titleText.text = todo.title
+            isCompleteButton.isSelected = todo.isComplete
+            updateImageCompleteButton(bool: isCompleteButton.isSelected)
+            dueDatePicker.date = todo.dueDate
+            notesText.text = todo.notes
+        } else {
+            dueDatePicker.date = Date().addingTimeInterval(24*60*60)
+        }
+        
         updateDueDateLabel(date: dueDatePicker.date)
         updateSaveNewToDoButtonState()
         
     }
     
+    func updateImageCompleteButton(bool:Bool){
+        if(isCompleteButton.isSelected == false){
+            isCompleteButton.setImage(UIImage(named: "cross"), for: .normal)
+        }
+        else{
+            isCompleteButton.setImage(UIImage(named: "check"), for: .normal)
+        }
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -165,6 +178,8 @@ class NewToDoViewController: UITableViewController {
         todo = ToDo(title: title, isComplete: isComplete, dueDate: dueDate, notes: notes)
         
     }
+    
+    
     
 
 }

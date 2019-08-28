@@ -8,7 +8,16 @@
 
 import UIKit
 
-class ToDoTableViewController: UITableViewController {
+class ToDoTableViewController: UITableViewController, ToDoCellDelegate {
+    func checkmarkTapped(sender: ToDoCell) {
+        if let indexPath = tableView.indexPath(for: sender){
+            var todo = todos[indexPath.row]
+            todo.isComplete = !todo.isComplete
+            todos[indexPath.row] = todo
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
     
     var todos = [ToDo]()
 
@@ -20,21 +29,29 @@ class ToDoTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
+        
         if let savedToDos = ToDo.loadToDos() {
             todos = savedToDos
         } else {
             todos = ToDo.loadSampleToDos()
         }
+ 
     }
     
     @IBAction func unwindToDoList(segue:UIStoryboardSegue){
         guard segue.identifier == "saveToDo" else {return}
         let sourceViewController = segue.source as! NewToDoViewController
         if let todo = sourceViewController.todo {
-            let newIndexPath = IndexPath(row:todos.count,section: 0)
-            todos.append(todo)
-            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            if let selectedIndexPath = tableView.indexPathForSelectedRow{
+                todos[selectedIndexPath.row] = todo
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            } else {
+                let newIndexPath = IndexPath(row:todos.count,section: 0)
+                todos.append(todo)
+                tableView.insertRows(at: [newIndexPath], with: .automatic)
+            }
         }
+        ToDo.saveToDos(todos: todos)
     }
 
     // MARK: - Table view data source
@@ -49,11 +66,22 @@ class ToDoTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCellIdentifier", for: indexPath)
-
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCellIdentifier") as? ToDoCell else{
+            fatalError("Could not dequeue a cell")
+        }
+        
         let todo = todos[indexPath.row]
-        cell.textLabel?.text = todo.title
-
+        cell.titleLabel.text = todo.title
+        cell.isCompleteButton.isSelected = todo.isComplete
+        cell.dueDate.text = todo.dueDate.description
+        
+        if (cell.isCompleteButton.isSelected == true){
+            cell.isCompleteButton.setImage(UIImage(named: "check"), for: .normal)
+            
+        } else {
+            cell.isCompleteButton.setImage(UIImage(named: "cross"), for: .normal)
+        }
+        cell.delegate = self
         return cell
     }
     
@@ -67,6 +95,7 @@ class ToDoTableViewController: UITableViewController {
         if editingStyle == .delete {
             todos.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            ToDo.saveToDos(todos: todos)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -88,14 +117,19 @@ class ToDoTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+        
+        if segue.identifier == "editToDo",
+            let navController = segue.destination as? UINavigationController,
+            let newTodoTableViewController = navController.topViewController as? NewToDoViewController {
+                let indexPath = tableView.indexPathForSelectedRow!
+                let selectedToDo = todos[indexPath.row]
+                newTodoTableViewController.todo = selectedToDo
+            }
+        }
+    
 }
